@@ -1,0 +1,909 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Magical English Grammar Explorer - Nouns & Pronouns</title>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Nunito:wght@400;600;700;800&family=Tenali+Ramakrishna&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #6366f1;
+            --primary-light: #818cf8;
+            --secondary: #ec4899;
+            --accent: #f59e0b;
+            --success: #10b981;
+            --bg-gradient: linear-gradient(135deg, #f0fdf4 0%, #eff6ff 50%, #fdf4ff 100%);
+            --card-bg: #ffffff;
+            --text-main: #1f2937;
+            --text-muted: #4b5563;
+            --telugu-color: #7c2d12;
+            --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.08), 0 8px 10px -6px rgba(0, 0, 0, 0.08);
+            --radius: 20px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Nunito', 'Tenali Ramakrishna', sans-serif;
+            background: var(--bg-gradient);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            line-height: 1.6;
+        }
+
+        header {
+            background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+            color: white;
+            padding: 2.5rem 1rem;
+            text-align: center;
+            box-shadow: 0 4px 20px rgba(79, 70, 229, 0.3);
+        }
+
+        header h1 {
+            font-family: 'Fredoka', 'Tenali Ramakrishna', sans-serif;
+            font-size: clamp(2rem, 4vw, 3.2rem);
+            margin-bottom: 0.5rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+
+        header p {
+            font-size: clamp(1.1rem, 2vw, 1.3rem);
+            opacity: 0.95;
+            font-weight: 600;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem 1.5rem;
+            width: 100%;
+            flex: 1;
+        }
+
+        /* Interactive Index / Table of Contents */
+        #main-index {
+            background: white;
+            border-radius: var(--radius);
+            padding: 2rem;
+            box-shadow: var(--shadow);
+            margin-bottom: 2.5rem;
+            border: 3px dashed var(--primary-light);
+            display: block;
+        }
+
+        #main-index.hidden {
+            display: none !important;
+        }
+
+        #main-index h2 {
+            font-family: 'Fredoka', sans-serif;
+            color: var(--primary);
+            font-size: 1.8rem;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .index-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .index-category {
+            background: #f8fafc;
+            border-radius: 14px;
+            padding: 1.25rem;
+            border: 2px solid #e2e8f0;
+        }
+
+        .index-category h3 {
+            font-family: 'Fredoka', sans-serif;
+            color: var(--secondary);
+            font-size: 1.2rem;
+            margin-bottom: 0.75rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .index-links {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .index-link {
+            background: white;
+            padding: 0.6rem 1rem;
+            border-radius: 10px;
+            text-decoration: none;
+            color: var(--text-main);
+            font-weight: 700;
+            font-size: 0.95rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border: 1.5px solid #cbd5e1;
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+
+        .index-link:hover {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+            transform: translateX(4px);
+        }
+
+        .index-link span.telugu-sub {
+            font-family: 'Tenali Ramakrishna', sans-serif;
+            font-size: 1.1rem;
+            opacity: 0.85;
+        }
+
+        .index-link:hover span.telugu-sub {
+            opacity: 1;
+            color: #fef08a;
+        }
+
+        /* Content Sections */
+        .grammar-section {
+            display: none;
+            background: white;
+            border-radius: var(--radius);
+            padding: 2.5rem;
+            box-shadow: var(--shadow);
+            margin-bottom: 2.5rem;
+            border-top: 6px solid var(--primary);
+        }
+
+        .grammar-section.active {
+            display: block !important;
+            animation: fadeIn 0.4s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            border-bottom: 2px solid #f1f5f9;
+            padding-bottom: 1rem;
+        }
+
+        .section-title-group h2 {
+            font-family: 'Fredoka', sans-serif;
+            font-size: 2.2rem;
+            color: var(--primary);
+        }
+
+        .section-title-group .telugu-title {
+            font-family: 'Tenali Ramakrishna', sans-serif;
+            font-size: 1.8rem;
+            color: var(--telugu-color);
+            font-weight: bold;
+        }
+
+        .back-to-index-btn {
+            background: #e2e8f0;
+            color: var(--text-main);
+            border: none;
+            padding: 0.75rem 1.25rem;
+            border-radius: 50px;
+            font-weight: 700;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.2s;
+        }
+
+        .back-to-index-btn:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        .definition-box {
+            background: #eff6ff;
+            border-left: 6px solid var(--primary);
+            padding: 1.5rem;
+            border-radius: 0 14px 14px 0;
+            margin-bottom: 2rem;
+        }
+
+        .definition-box p {
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .definition-box .telugu-def {
+            font-family: 'Tenali Ramakrishna', sans-serif;
+            font-size: 1.4rem;
+            color: var(--telugu-color);
+            font-weight: bold;
+        }
+
+        .examples-heading {
+            font-family: 'Fredoka', sans-serif;
+            font-size: 1.5rem;
+            color: var(--secondary);
+            margin-bottom: 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .examples-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 1.2rem;
+        }
+
+        .example-card {
+            background: #fdf8f6;
+            border: 2px solid #fed7aa;
+            border-radius: 14px;
+            padding: 1.25rem;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .ex-number {
+            position: absolute;
+            top: -10px;
+            left: 15px;
+            background: var(--accent);
+            color: white;
+            font-family: 'Fredoka', sans-serif;
+            font-size: 0.85rem;
+            padding: 2px 10px;
+            border-radius: 20px;
+            font-weight: 700;
+        }
+
+        .ex-english {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #1e293b;
+            margin-top: 0.5rem;
+            margin-bottom: 0.4rem;
+        }
+
+        .ex-telugu {
+            font-family: 'Tenali Ramakrishna', sans-serif;
+            font-size: 1.35rem;
+            color: var(--telugu-color);
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+
+        .ex-explanation {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            border-top: 1px dashed #cbd5e1;
+            padding-top: 0.5rem;
+            margin-top: auto;
+        }
+
+        .speak-btn {
+            background: none;
+            border: none;
+            color: var(--primary);
+            cursor: pointer;
+            font-size: 1.1rem;
+            margin-left: 8px;
+        }
+
+        .speak-btn:hover {
+            color: var(--secondary);
+        }
+
+        footer {
+            background: #1e293b;
+            color: white;
+            text-align: center;
+            padding: 1.5rem;
+            margin-top: auto;
+        }
+
+        footer span {
+            color: #f472b6;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1><i class="fa-solid fa-graduation-cap"></i> Magical English Grammar Explorer</h1>
+        <p>Learn Nouns & Pronouns with 20 Examples & Telugu Explanations for Children!</p>
+    </header>
+
+    <div class="container">
+
+        <!-- Interactive Index / Table of Contents -->
+        <div id="main-index">
+            <h2><i class="fa-solid fa-list-ul"></i> Table of Contents (సూచిక) - Click Any Topic to Explore 20 Examples!</h2>
+            <div class="index-grid">
+                <!-- Nouns Category -->
+                <div class="index-category" style="border-top: 4px solid #3b82f6;">
+                    <h3><i class="fa-solid fa-cube"></i> Nouns (నామవాచకము)</h3>
+                    <div class="index-links">
+                        <div class="index-link" data-target="proper-noun"><span>1. Proper Noun</span> <span class="telugu-sub">సంజ్ఞా నామవాచకము</span></div>
+                        <div class="index-link" data-target="common-noun"><span>2. Common Noun</span> <span class="telugu-sub">జాతి నామవాచకము</span></div>
+                        <div class="index-link" data-target="collective-noun"><span>3. Collective Noun</span> <span class="telugu-sub">సమూహ నామవాచకము</span></div>
+                        <div class="index-link" data-target="material-noun"><span>4. Material Noun</span> <span class="telugu-sub">పదార్థ నామవాచకము</span></div>
+                        <div class="index-link" data-target="abstract-noun"><span>5. Abstract Noun</span> <span class="telugu-sub">గుణ నామవాచకము</span></div>
+                        <div class="index-link" data-target="countable-noun"><span>6. Countable Noun</span> <span class="telugu-sub">లెక్కించదగిన నామవాచకం</span></div>
+                        <div class="index-link" data-target="uncountable-noun"><span>7. Uncountable Noun</span> <span class="telugu-sub">లెక్కించలేని నామవాచకం</span></div>
+                    </div>
+                </div>
+
+                <!-- Pronouns Category -->
+                <div class="index-category" style="border-top: 4px solid #ec4899;">
+                    <h3><i class="fa-solid fa-shuffle"></i> Pronouns (సర్వనామము)</h3>
+                    <div class="index-links">
+                        <div class="index-link" data-target="personal-pronoun"><span>1. Personal Pronoun</span> <span class="telugu-sub">పురుష సర్వనామము</span></div>
+                        <div class="index-link" data-target="possessive-pronoun"><span>2. Possessive Pronoun</span> <span class="telugu-sub">యాజమాన్య సర్వనామము</span></div>
+                        <div class="index-link" data-target="reflexive-pronoun"><span>3. Reflexive Pronoun</span> <span class="telugu-sub">ఆత్మార్థక సర్వనామము</span></div>
+                        <div class="index-link" data-target="demonstrative-pronoun"><span>4. Demonstrative Pronoun</span> <span class="telugu-sub">నిర్దేశాత్మక సర్వనామము</span></div>
+                        <div class="index-link" data-target="interrogative-pronoun"><span>5. Interrogative Pronoun</span> <span class="telugu-sub">ప్రశ్నార్థక సర్వనామము</span></div>
+                        <div class="index-link" data-target="relative-pronoun"><span>6. Relative Pronoun</span> <span class="telugu-sub">సంబంధ సర్వనామము</span></div>
+                        <div class="index-link" data-target="indefinite-pronoun"><span>7. Indefinite Pronoun</span> <span class="telugu-sub">అనిశ్చిత సర్వనామము</span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SECTIONS CONTAINER -->
+        <div id="proper-noun" class="grammar-section">
+            <div class="section-header">
+                <div class="section-title-group"><h2>1. Proper Noun</h2><div class="telugu-title">సంజ్ఞా నామవాచకము</div></div>
+                <button class="back-to-index-btn"><i class="fa-solid fa-arrow-left"></i> Back to Index</button>
+            </div>
+            <div class="definition-box"><p><strong>English:</strong> A Proper noun is the specific, exact name of a particular person, place, or thing.</p><div class="telugu-def">తెలుగు వివరణ: ఒక నిర్దిష్టమైన వ్యక్తి, ప్రదేశం లేదా వస్తువు యొక్క ప్రత్యేక పేరును 'సంజ్ఞా నామవాచకము' అంటారు.</div></div>
+            <div class="examples-heading"><i class="fa-solid fa-star"></i> 20 Proper Noun Examples</div>
+            <div class="examples-grid" id="proper-noun-examples"></div>
+        </div>
+
+        <div id="common-noun" class="grammar-section">
+            <div class="section-header">
+                <div class="section-title-group"><h2>2. Common Noun</h2><div class="telugu-title">జాతి నామవాచకము</div></div>
+                <button class="back-to-index-btn"><i class="fa-solid fa-arrow-left"></i> Back to Index</button>
+            </div>
+            <div class="definition-box"><p><strong>English:</strong> A Common noun refers to general, unspecific items, people, animals, or places.</p><div class="telugu-def">తెలుగు వివరణ: ఒకే రకమైన వస్తువులు, వ్యక్తులు, జంతువులకు సాధారణంగా వర్తించే పేరును 'జాతి నామవాచకము' అంటారు.</div></div>
+            <div class="examples-heading"><i class="fa-solid fa-star"></i> 20 Common Noun Examples</div>
+            <div class="examples-grid" id="common-noun-examples"></div>
+        </div>
+
+        <div id="collective-noun" class="grammar-section">
+            <div class="section-header">
+                <div class="section-title-group"><h2>3. Collective Noun</h2><div class="telugu-title">సమూహ నామవాచకము</div></div>
+                <button class="back-to-index-btn"><i class="fa-solid fa-arrow-left"></i> Back to Index</button>
+            </div>
+            <div class="definition-box"><p><strong>English:</strong> A Collective noun represents a group or collection of people, animals, or things.</p><div class="telugu-def">తెలుగు వివరణ: వ్యక్తులు, జంతువులు లేదా వస్తువుల సమూహాన్ని సూచించే పదాన్ని 'సమూహ నామవాచకము' అంటారు.</div></div>
+            <div class="examples-heading"><i class="fa-solid fa-star"></i> 20 Collective Noun Examples</div>
+            <div class="examples-grid" id="collective-noun-examples"></div>
+        </div>
+
+        <div id="material-noun" class="grammar-section">
+            <div class="section-header">
+                <div class="section-title-group"><h2>4. Material Noun</h2><div class="telugu-title">పదార్థ నామవాచకము</div></div>
+                <button class="back-to-index-btn"><i class="fa-solid fa-arrow-left"></i> Back to Index</button>
+            </div>
+            <div class="definition-box"><p><strong>English:</strong> A Material noun names substances, raw materials, or ingredients.</p><div class="telugu-def">తెలుగు వివరణ: వస్తువులను తయారు చేయడానికి ఉపయోగపడే ముడి పదార్థాలను సూచించే పదాన్ని 'పదార్థ నామవాచకము' అంటారు.</div></div>
+            <div class="examples-heading"><i class="fa-solid fa-star"></i> 20 Material Noun Examples</div>
+            <div class="examples-grid" id="material-noun-examples"></div>
+        </div>
+
+        <div id="abstract-noun" class="grammar-section">
+            <div class="section-header">
+                <div class="section-title-group"><h2>5. Abstract Noun</h2><div class="telugu-title">గుణ నామవాచకము</div></div>
+                <button class="back-to-index-btn"><i class="fa-solid fa-arrow-left"></i> Back to Index</button>
+            </div>
+            <div class="definition-box"><p><strong>English:</strong> An Abstract noun names an idea, quality, feeling, or state.</p><div class="telugu-def">తెలుగు వివరణ: తాకడానికి వీలులేని భావాలు, గుణాలు, లేదా స్థితులను సూచించే పదాలను 'గుణ నామవాచకము' అంటారు.</div></div>
+            <div class="examples-heading"><i class="fa-solid fa-star"></i> 20 Abstract Noun Examples</div>
+            <div class="examples-grid" id="abstract-noun-examples"></div>
+        </div>
+
+        <div id="countable-noun" class="grammar-section">
+            <div class="section-header">
+                <div class="section-title-group"><h2>6. Countable Noun</h2><div class="telugu-title">లెక్కించదగిన నామవాచకం</div></div>
+                <button class="back-to-index-btn"><i class="fa-solid fa-arrow-left"></i> Back to Index</button>
+            </div>
+            <div class="definition-box"><p><strong>English:</strong> Countable nouns can be counted individually using numbers.</p><div class="telugu-def">తెలుగు వివరణ: అంకెలు వేసి విడివిడిగా లెక్కించగలిగే వాటిని 'లెక్కించదగిన నామవాచకం' అంటారు.</div></div>
+            <div class="examples-heading"><i class="fa-solid fa-star"></i> 20 Countable Noun Examples</div>
+            <div class="examples-grid" id="countable-noun-examples"></div>
+        </div>
+
+        <div id="uncountable-noun" class="grammar-section">
+            <div class="section-header">
+                <div class="section-title-group"><h2>7. Uncountable Noun</h2><div class="telugu-title">లెక్కించలేని నామవాచకం</div></div>
+                <button class="back-to-index-btn"><i class="fa-solid fa-arrow-left"></i> Back to Index</button>
+            </div>
+            <div class="definition-box"><p><strong>English:</strong> Uncountable nouns cannot be counted individually.</p><div class="telugu-def">తెలుగు వివరణ: విడివిడిగా లెక్కించడానికి వీలులేని పదార్థాలను 'లెక్కించలేని నామవాచకం' అంటారు.</div></div>
+            <div class="examples-heading"><i class="fa-solid fa-star"></i> 20 Uncountable Noun Examples</div>
+            <div class="examples-grid" id="uncountable-noun-examples"></div>
+        </div>
+
+        <div id="personal-pronoun" class="grammar-section">
+            <div class="section-header">
+                <div class="section-title-group"><h2>1. Personal Pronoun</h2><div class="telugu-title">పురుష సర్వనామము</div></div>
+                <button class="back-to-index-btn"><i class="fa-solid fa-arrow-left"></i> Back to Index</button>
+            </div>
+            <div class="definition-box"><p><strong>English:</strong> Words like I, you, he, she, it used as substitutes for people or things.</p><div class="telugu-def">తెలుగు వివరణ: పేర్లకు బదులుగా వాడే పదాలను 'పురుష సర్వనామము' అంటారు.</div></div>
+            <div class="examples-heading"><i class="fa-solid fa-star"></i> 20 Personal Pronoun Examples</div>
+            <div class="examples-grid" id="personal-pronoun-examples"></div>
+        </div>
+
+        <div id="possessive-pronoun" class="grammar-section">
+            <div class="section-header">
+                <div class="section-title-group"><h2>2. Possessive Pronoun</h2><div class="telugu-title">యాజమాన్య సర్వనామము</div></div>
+                <button class="back-to-index-btn"><i class="fa-solid fa-arrow-left"></i> Back to Index</button>
+            </div>
+            <div class="definition-box"><p><strong>English:</strong> Possessive pronouns show ownership (mine, yours, his, hers).</p><div class="telugu-def">తెలుగు వివరణ: యాజమాన్యం లేదా సొంతం అని తెలిపే పదాలను 'యాజమాన్య సర్వనామము' అంటారు.</div></div>
+            <div class="examples-heading"><i class="fa-solid fa-star"></i> 20 Possessive Pronoun Examples</div>
+            <div class="examples-grid" id="possessive-pronoun-examples"></div>
+        </div>
+
+        <div id="reflexive-pronoun" class="grammar-section">
+            <div class="section-header">
+                <div class="section-title-group"><h2>3. Reflexive Pronoun</h2><div class="telugu-title">ఆత్మార్థక సర్వనామము</div></div>
+                <button class="back-to-index-btn"><i class="fa-solid fa-arrow-left"></i> Back to Index</button>
+            </div>
+            <div class="definition-box"><p><strong>English:</strong> Reflexive pronouns (myself, yourself) reflect back to the subject.</p><div class="telugu-def">తెలుగు వివరణ: కర్త తానే స్వయంగా పని చేసుకున్నాడని తెలిపే పదాలను 'ఆత్మార్థక సర్వనామము' అంటారు.</div></div>
+            <div class="examples-heading"><i class="fa-solid fa-star"></i> 20 Reflexive Pronoun Examples</div>
+            <div class="examples-grid" id="reflexive-pronoun-examples"></div>
+        </div>
+
+        <div id="demonstrative-pronoun" class="grammar-section">
+            <div class="section-header">
+                <div class="section-title-group"><h2>4. Demonstrative Pronoun</h2><div class="telugu-title">నిర్దేశాత్మక సర్వనామము</div></div>
+                <button class="back-to-index-btn"><i class="fa-solid fa-arrow-left"></i> Back to Index</button>
+            </div>
+            <div class="definition-box"><p><strong>English:</strong> Demonstrative pronouns point out things (this, that, these, those).</p><div class="telugu-def">తెలుగు వివరణ: వ్యక్తులను లేదా వస్తువులను వేలెత్తి చూపడానికి వాడే పదాలను 'నిర్దేశాత్మక సర్వనామము' అంటారు.</div></div>
+            <div class="examples-heading"><i class="fa-solid fa-star"></i> 20 Demonstrative Pronoun Examples</div>
+            <div class="examples-grid" id="demonstrative-pronoun-examples"></div>
+        </div>
+
+        <div id="interrogative-pronoun" class="grammar-section">
+            <div class="section-header">
+                <div class="section-title-group"><h2>5. Interrogative Pronoun</h2><div class="telugu-title">ప్రశ్నార్థక సర్వనామము</div></div>
+                <button class="back-to-index-btn"><i class="fa-solid fa-arrow-left"></i> Back to Index</button>
+            </div>
+            <div class="definition-box"><p><strong>English:</strong> Interrogative pronouns are used to ask questions (who, what, which).</p><div class="telugu-def">తెలుగు వివరణ: ప్రశ్నలు అడగడానికి ఉపయోగించే పదాలను 'ప్రశ్నార్థక సర్వనామము' అంటారు.</div></div>
+            <div class="examples-heading"><i class="fa-solid fa-star"></i> 20 Interrogative Pronoun Examples</div>
+            <div class="examples-grid" id="interrogative-pronoun-examples"></div>
+        </div>
+
+        <div id="relative-pronoun" class="grammar-section">
+            <div class="section-header">
+                <div class="section-title-group"><h2>6. Relative Pronoun</h2><div class="telugu-title">సంబంధ సర్వనామము</div></div>
+                <button class="back-to-index-btn"><i class="fa-solid fa-arrow-left"></i> Back to Index</button>
+            </div>
+            <div class="definition-box"><p><strong>English:</strong> Relative pronouns connect clauses to a noun (who, that, which).</p><div class="telugu-def">తెలుగు వివరణ: వాక్యాలను నామవాచకంతో అనుసంధానించడానికి వాడే పదాలను 'సంబంధ సర్వనామము' అంటారు.</div></div>
+            <div class="examples-heading"><i class="fa-solid fa-star"></i> 20 Relative Pronoun Examples</div>
+            <div class="examples-grid" id="relative-pronoun-examples"></div>
+        </div>
+
+        <div id="indefinite-pronoun" class="grammar-section">
+            <div class="section-header">
+                <div class="section-title-group"><h2>7. Indefinite Pronoun</h2><div class="telugu-title">అనిశ్చిత సర్వనామము</div></div>
+                <button class="back-to-index-btn"><i class="fa-solid fa-arrow-left"></i> Back to Index</button>
+            </div>
+            <div class="definition-box"><p><strong>English:</strong> Indefinite pronouns refer to non-specific people or things (anyone, everything).</p><div class="telugu-def">తెలుగు వివరణ: ఎవరైనా లేదా ఏదైనా అని తెలిపే పదాలను 'అనిశ్చిత సర్వనామము' అంటారు.</div></div>
+            <div class="examples-heading"><i class="fa-solid fa-star"></i> 20 Indefinite Pronoun Examples</div>
+            <div class="examples-grid" id="indefinite-pronoun-examples"></div>
+        </div>
+
+    </div>
+
+    <footer>
+        <p>Designed with ❤️ for Children | <span>English & Telugu Grammar Made Easy</span></p>
+    </footer>
+
+    <script>
+        const grammarData = {
+            "proper-noun": [
+                {en: "<b>Delhi</b> is a big city.", tel: "ఢిల్లీ ఒక పెద్ద నగరము.", exp: "Delhi is a specific name of a city."},
+                {en: "<b>Ravi</b> is playing football.", tel: "రవి ఫుట్‌బాల్ ఆడుతున్నాడు.", exp: "Ravi is a specific name of a boy."},
+                {en: "<b>India</b> is our country.", tel: "భారతదేశం మా దేశం.", exp: "India is a specific name of a country."},
+                {en: "I love reading <b>Ramayana</b>.", tel: "నాకు రామాయణం చదవడం ఇష్టం.", exp: "Ramayana is a specific holy book."},
+                {en: "We visit <b>Hyderabad</b>.", tel: "మేము హైదరాబాద్‌ సందర్శిస్తాము.", exp: "Hyderabad is a specific city name."},
+                {en: "<b>Sunday</b> is a holiday.", tel: "ఆదివారం సెలవు దినం.", exp: "Sunday is a specific day."},
+                {en: "<b>Ganga</b> is a sacred river.", tel: "గంగా ఒక పవిత్ర నది.", exp: "Ganga is a specific river."},
+                {en: "<b>January</b> is the first month.", tel: "జనవరి మొదటి నెల.", exp: "January is a specific month."},
+                {en: "<b>Taj Mahal</b> is in Agra.", tel: "తాజ్ మహల్ ఆగ్రాలో ఉంది.", exp: "Taj Mahal is a monument."},
+                {en: "<b>English</b> is a nice language.", tel: "ఇంగ్లీష్ ఒక మంచి భాష.", exp: "Specific language name."},
+                {en: "<b>Mount Everest</b> is tall.", tel: "మౌంట్ ఎవరెస్ట్ ఎత్తైనది.", exp: "Specific mountain name."},
+                {en: "<b>Sachin</b> is a great player.", tel: "సచిన్ గొప్ప ఆటగాడు.", exp: "Specific person name."},
+                {en: "<b>Diwali</b> is a festival.", tel: "దీపావళి పండుగ.", exp: "Specific festival."},
+                {en: "<b>Jupiter</b> is a huge planet.", tel: "బృహస్పతి పెద్ద గ్రహం.", exp: "Specific planet."},
+                {en: "<b>Microsoft</b> is a company.", tel: "మైక్రోసాఫ్ట్ ఒక కంపెనీ.", exp: "Specific company."},
+                {en: "<b>Himalayas</b> protect India.", tel: "హిమాలయాలు రక్షిస్తాయి.", exp: "Specific mountain range."},
+                {en: "<b>Chennai Express</b> is fast.", tel: "చెన్నై ఎక్స్‌ప్రెస్ వేగంగా వెళ్తుంది.", exp: "Specific train."},
+                {en: "<b>Google</b> helps us search.", tel: "గూగుల్ సహాయపడుతుంది.", exp: "Specific brand."},
+                {en: "<b>Cumbum</b> is my town.", tel: "కంభం నా పట్టణం.", exp: "Specific town."},
+                {en: "<b>Mickey Mouse</b> is a cartoon.", tel: "మిక్కీ మౌస్ కార్టూన్.", exp: "Specific character."}
+            ],
+            "common-noun": [
+                {en: "The <b>dog</b> barks loudly.", tel: "కుక్క గట్టిగా మొరుగుతుంది.", exp: "Dog is a general animal."},
+                {en: "A <b>boy</b> runs fast.", tel: "బాలుడు పరిగెత్తుతాడు.", exp: "Boy is a general person."},
+                {en: "The <b>cat</b> drinks milk.", tel: "పిల్లి పాలు తాగుతుంది.", exp: "Cat is a general animal."},
+                {en: "She sits on a <b>chair</b>.", tel: "ఆమె కుర్చీపై కూర్చుంది.", exp: "Chair is a general object."},
+                {en: "The <b>tree</b> gives shade.", tel: "చెట్టు నీడ ఇస్తుంది.", exp: "Tree is a general plant."},
+                {en: "I write with a <b>pen</b>.", tel: "నేను పెన్నుతో రాస్తాను.", exp: "Pen is a tool."},
+                {en: "The <b>car</b> is red.", tel: "కారు ఎరుపు రంగులో ఉంది.", exp: "Car is a vehicle."},
+                {en: "Birds live in a <b>nest</b>.", tel: "పక్షులు గూటిలో ఉంటాయి.", exp: "Nest is a place."},
+                {en: "The <b>book</b> is thick.", tel: "పుస్తకం మందంగా ఉంది.", exp: "Book is an object."},
+                {en: "A <b>fish</b> swims.", tel: "చేప ఈదుతుంది.", exp: "Fish is an animal."},
+                {en: "The <b>flower</b> smells sweet.", tel: "పువ్వు సువాసన ఇస్తుంది.", exp: "Flower is general."},
+                {en: "The <b>river</b> flows.", tel: "నది ప్రవహిస్తుంది.", exp: "River is general."},
+                {en: "A <b>doctor</b> cures patients.", tel: "వైద్యుడు నయం చేస్తాడు.", exp: "Doctor is a profession."},
+                {en: "The <b>apple</b> is sweet.", tel: "ఆపిల్ తియ్యగా ఉంటుంది.", exp: "Fruit is general."},
+                {en: "The <b>house</b> is big.", tel: "ఇల్లు పెద్దది.", exp: "House is general."},
+                {en: "The <b>girl</b> sings well.", tel: "అమ్మాయి పాడుతుంది.", exp: "Girl is general."},
+                {en: "The <b>school</b> is closed.", tel: "పాఠశాల మూసివేయబడింది.", exp: "School is general."},
+                {en: "A <b>teacher</b> teaches us.", tel: "ఉపాధ్యాయుడు నేర్పుతాడు.", exp: "Teacher is general."},
+                {en: "The <b>clock</b> ticks.", tel: "గడియారం టిక్ అంటుంది.", exp: "Clock is general."},
+                {en: "The <b>bird</b> flies.", tel: "పక్షి ఎగురుతుంది.", exp: "Bird is general."}
+            ],
+            "collective-noun": [
+                {en: "A <b>team</b> of players won.", tel: "ఆటగాళ్ల జట్టు గెలిచింది.", exp: "Team of players."},
+                {en: "A <b>flock</b> of sheep grazed.", tel: "గొర్రెల మంద మేసింది.", exp: "Flock of sheep."},
+                {en: "A <b>herd</b> of cows walked.", tel: "ఆవుల గుంపు నడిచింది.", exp: "Herd of cows."},
+                {en: "A <b>swarm</b> of bees flew.", tel: "తేనెటీగల గుంపు ఎగిరింది.", exp: "Swarm of bees."},
+                {en: "A <b>pack</b> of wolves howled.", tel: "తోడేళ్ల గుంపు అరిచింది.", exp: "Pack of wolves."},
+                {en: "A <b>bunch</b> of grapes is sweet.", tel: "ద్రాక్ష గుత్తి తియ్యగా ఉంది.", exp: "Bunch of grapes."},
+                {en: "A <b>class</b> of students is quiet.", tel: "విద్యార్థుల తరగతి నిశ్శబ్దం.", exp: "Class of students."},
+                {en: "A <b>pod</b> of dolphins jumped.", tel: "డాల్ఫిన్ల గుంపు దూకింది.", exp: "Pod of dolphins."},
+                {en: "A <b>school</b> of fish swam.", tel: "చేపల గుంపు ఈదింది.", exp: "School of fish."},
+                {en: "A <b>crowd</b> gathered here.", tel: "జనం గుమిగూడారు.", exp: "Crowd of people."},
+                {en: "A <b>family</b> is happy.", tel: "కుటుంబం సంతోషంగా ఉంది.", exp: "Family members."},
+                {en: "A <b>bouquet</b> of flowers.", tel: "పువ్వుల గుత్తి బాగుంది.", exp: "Bouquet of flowers."},
+                {en: "An <b>army</b> of soldiers marched.", tel: "సైనికుల సైన్యం కదిలింది.", exp: "Army of soldiers."},
+                {en: "A <b>library</b> has books.", tel: "గ్రంథాలయంలో పుస్తకాలు.", exp: "Library of books."},
+                {en: "A <b>fleet</b> of ships sailed.", tel: "ఓడల సమూహం ప్రయాణించింది.", exp: "Fleet of ships."},
+                {en: "A <b>gang</b> of thieves was caught.", tel: "దొంగల ముఠా పట్టుబడింది.", exp: "Gang of thieves."},
+                {en: "A <b>troop</b> of monkeys chattered.", tel: "కోతుల గుంపు అరుస్తున్నాయి.", exp: "Troop of monkeys."},
+                {en: "A <b>pride</b> of lions rested.", tel: "సింహాల గుంపు విశ్రాంతి.", exp: "Pride of lions."},
+                {en: "A <b>panel</b> of judges decided.", tel: "న్యాయమూర్తుల కమిటీ నిర్ణయం.", exp: "Panel of judges."},
+                {en: "A <b>constellation</b> of stars.", tel: "నక్షత్రాల సముదాయం మెరిసింది.", exp: "Constellation of stars."}
+            ],
+            "material-noun": [
+                {en: "The ring is made of <b>gold</b>.", tel: "ఉంగరం బంగారంతో చేయబడింది.", exp: "Gold metal."},
+                {en: "Chairs are made of <b>wood</b>.", tel: "కుర్చీలు చెక్కతో చేయబడతాయి.", exp: "Wood material."},
+                {en: "We drink <b>milk</b> daily.", tel: "మేము రోజు పాలు తాగుతాము.", exp: "Milk substance."},
+                {en: "Bottles are made of <b>plastic</b>.", tel: "సీసాలు ప్లాస్టిక్‌.", exp: "Plastic material."},
+                {en: "This pot is made of <b>clay</b>.", tel: "ఈ కుండ మట్టితో తయారీ.", exp: "Clay substance."},
+                {en: "Coins are made of <b>silver</b>.", tel: "నాణేలు వెండితో.", exp: "Silver metal."},
+                {en: "Bridges use <b>iron</b>.", tel: "వారధులు ఇనుముతో.", exp: "Iron metal."},
+                {en: "<b>Water</b> is essential.", tel: "జీవితానికి నీరు అవసరం.", exp: "Water substance."},
+                {en: "We use <b>sugar</b> in tea.", tel: "టీలో పంచదార వాడతాము.", exp: "Sugar substance."},
+                {en: "<b>Salt</b> adds taste.", tel: "ఉప్పు రుచి ఇస్తుంది.", exp: "Salt material."},
+                {en: "Paper uses <b>cotton</b>.", tel: "కాగితం పత్తితో.", exp: "Cotton material."},
+                {en: "Windows use <b>glass</b>.", tel: "కిటికీలు గాజుతో.", exp: "Glass material."},
+                {en: "<b>Rice</b> is our staple food.", tel: "బియ్యం ప్రధాన ఆహారం.", exp: "Food grain."},
+                {en: "Bricks are made from <b>mud</b>.", tel: "ఇటుకలు బురదతో.", exp: "Mud substance."},
+                {en: "Candles are made of <b>wax</b>.", tel: "మొవ్వత్తులు మైనంతో.", exp: "Wax material."},
+                {en: "Plates are made of <b>steel</b>.", tel: "ప్లేట్లు స్టీల్‌తో.", exp: "Steel metal."},
+                {en: "<b>Copper</b> conducts electricity.", tel: "రాగి విద్యుత్తును ప్రసరిస్తుంది.", exp: "Copper metal."},
+                {en: "We use <b>oil</b> for cooking.", tel: "నూనె వాడతాము.", exp: "Oil liquid."},
+                {en: "<b>Wheat</b> is ground to flour.", tel: "గోధుమలను పిండిగా మరుస్తారు.", exp: "Food grain."},
+                {en: "Statues are made of <b>stone</b>.", tel: "విగ్రహాలు రాతితో.", exp: "Stone material."}
+            ],
+            "abstract-noun": [
+                {en: "<b>Honesty</b> is best.", tel: "నిజాయితీ ఉత్తమమైనది.", exp: "Quality."},
+                {en: "Always speak the <b>truth</b>.", tel: "నిజం మాట్లాడు.", exp: "Concept."},
+                {en: "<b>Wisdom</b> is great.", tel: "జ్ఞానం గొప్పది.", exp: "Quality."},
+                {en: "We feel great <b>joy</b>.", tel: "ఆనందాన్ని పొందుతాము.", exp: "Feeling."},
+                {en: "<b>Courage</b> helps us win.", tel: "ధైర్యం గెలిపిస్తుంది.", exp: "State of mind."},
+                {en: "<b>Kindness</b> wins hearts.", tel: "దయ గెలుచుకుంటుంది.", exp: "Quality."},
+                {en: "<b>Health</b> is wealth.", tel: "ఆరోగ్యమే భాగ్యం.", exp: "State of being."},
+                {en: "<b>Love</b> makes us happy.", tel: "ప్రేమ సంతోషపరుస్తుంది.", exp: "Feeling."},
+                {en: "<b>Anger</b> is bad.", tel: "కోపం మంచిది కాదు.", exp: "Emotion."},
+                {en: "Children live in <b>happiness</b>.", tel: "పిల్లలు సంతోషంలో.", exp: "State."},
+                {en: "<b>Peace</b> is important.", tel: "శాంతి ముఖ్యం.", exp: "State."},
+                {en: "<b>Beauty</b> lies in nature.", tel: "అందం ప్రకృతిలో ఉంది.", exp: "Quality."},
+                {en: "<b>Knowledge</b> is power.", tel: "జ్ఞానమే శక్తి.", exp: "Abstract concept."},
+                {en: "<b>Fear</b> makes us shake.", tel: "భయం వణికిస్తుంది.", exp: "Emotion."},
+                {en: "<b>Success</b> requires work.", tel: "విజయానికి కష్టం అవసరం.", exp: "State."},
+                {en: "<b>Sorrow</b> brings tears.", tel: "విచారం కన్నీళ్లను తెస్తుంది.", exp: "Feeling."},
+                {en: "<b>Childhood</b> is sweet.", tel: "బాల్యం మధురమైనది.", exp: "Stage of life."},
+                {en: "<b>Sleep</b> gives rest.", tel: "నిద్ర విశ్రాంతి.", exp: "State."},
+                {en: "<b>Pride</b> leads to a fall.", tel: "గర్వం పతనం.", exp: "Negative quality."},
+                {en: "<b>Hope</b> keeps us going.", tel: "ఆశ నడిపిస్తుంది.", exp: "Feeling."}
+            ],
+            "countable-noun": [
+                {en: "I have two <b>pens</b>.", tel: "నా దగ్గర రెండు పెన్నులు.", exp: "Can be counted."},
+                {en: "She ate an <b>apple</b>.", tel: "ఆమె ఆపిల్ తిన్నది.", exp: "Countable fruit."},
+                {en: "There are five <b>books</b>.", tel: "అక్కడ ఐదు పుస్తకాలు.", exp: "Can be counted."},
+                {en: "The cat has four <b>kittens</b>.", tel: "నాలుగు పిల్లులు.", exp: "Countable animals."},
+                {en: "I bought three <b>mangoes</b>.", tel: "మూడు మామిడిపండ్లు.", exp: "Countable."},
+                {en: "Ten <b>boys</b> are playing.", tel: "పది మంది బాలురు.", exp: "Countable persons."},
+                {en: "She has one <b>umbrella</b>.", tel: "ఒక గొడుగు.", exp: "Countable."},
+                {en: "He owns a fast <b>car</b>.", tel: "ఒక కారు ఉంది.", exp: "Countable."},
+                {en: "We saw three <b>birds</b>.", tel: "మూడు పక్షులు.", exp: "Countable."},
+                {en: "There is a <b>chair</b> here.", tel: "ఒక కుర్చీ ఉంది.", exp: "Countable."},
+                {en: "I ate two <b>bananas</b>.", tel: "రెండు అరటిపండ్లు.", exp: "Countable."},
+                {en: "Six <b>students</b> are reading.", tel: "ఆరుగురు విద్యార్థులు.", exp: "Countable."},
+                {en: "He has a new <b>phone</b>.", tel: "కొత్త ఫోన్ ఉంది.", exp: "Countable."},
+                {en: "She has four <b>dresses</b>.", tel: "నాలుగు దుస్తులు.", exp: "Countable."},
+                {en: "Twelve <b>months</b> in a year.", tel: "పన్నెండు నెలలు.", exp: "Countable."},
+                {en: "I see three <b>stars</b>.", tel: "మూడు నక్షత్రాలు.", exp: "Countable."},
+                {en: "The dog caught two <b>balls</b>.", tel: "రెండు బంతులు.", exp: "Countable."},
+                {en: "We planted five <b>trees</b>.", tel: "ఐదు చెట్లు.", exp: "Countable."},
+                {en: "She has one <b>brother</b>.", tel: "ఒక తమ్ముడు.", exp: "Countable."},
+                {en: "He has twenty <b>coins</b>.", tel: "ఇరవై నాణేలు.", exp: "Countable."}
+            ],
+            "uncountable-noun": [
+                {en: "Please give me some <b>water</b>.", tel: "కొంచెం నీరు ఇవ్వండి.", exp: "Cannot be counted."},
+                {en: "Drink a glass of <b>milk</b>.", tel: "ఒక గ్లాసు పాలు.", exp: "Uncountable liquid."},
+                {en: "Add some <b>sugar</b>.", tel: "కొంచెం పంచదార.", exp: "Uncountable grains."},
+                {en: "<b>Rice</b> is cooked.", tel: "అన్నం వండుతారు.", exp: "Uncountable."},
+                {en: "<b>Honesty</b> is a virtue.", tel: "నిజాయితీ గొప్ప గుణం.", exp: "Abstract uncountable."},
+                {en: "Floor covered with <b>dust</b>.", tel: "ధూళి.", exp: "Uncountable."},
+                {en: "Add a pinch of <b>salt</b>.", tel: "చిటికెడు ఉప్పు.", exp: "Uncountable."},
+                {en: "We need fresh <b>air</b>.", tel: "స్వచ్ఛమైన గాలి.", exp: "Uncountable."},
+                {en: "<b>Gold</b> is precious.", tel: "బంగారం విలువైనది.", exp: "Uncountable material."},
+                {en: "<b>Oil</b> floats.", tel: "నూనె తేలుతుంది.", exp: "Liquid uncountable."},
+                {en: "<b>Wisdom</b> comes with age.", tel: "జ్ఞానం వస్తుంది.", exp: "Concept."},
+                {en: "<b>Tea</b> is hot.", tel: "టీ వేడిగా ఉంది.", exp: "Liquid."},
+                {en: "Children need <b>love</b>.", tel: "ప్రేమ కావాలి.", exp: "Feeling."},
+                {en: "<b>Music</b> relaxes us.", tel: "సంగీతం ప్రశాంతత.", exp: "Uncountable."},
+                {en: "<b>Snow</b> fell.", tel: "మంచు కురిసింది.", exp: "Uncountable."},
+                {en: "<b>Paper</b> is made from wood.", tel: "కాగితం.", exp: "Material."},
+                {en: "<b>Information</b> is useful.", tel: "సమాచారం.", exp: "Uncountable."},
+                {en: "<b>Knowledge</b> is power.", tel: "జ్ఞానమే శక్తి.", exp: "Uncountable."},
+                {en: "<b>Sand</b> is found on beaches.", tel: "ఇసుక.", exp: "Material."},
+                {en: "<b>Weather</b> is pleasant.", tel: "వాతావరణం.", exp: "Concept."}
+            ],
+            "personal-pronoun": [
+                {en: "<b>I</b> am a student.", tel: "నేను విద్యార్థిని.", exp: "First person singular."},
+                {en: "<b>You</b> are my friend.", tel: "నువ్వు స్నేహితుడివి.", exp: "Second person."},
+                {en: "<b>He</b> is playing.", tel: "అతను ఆడుతున్నాడు.", exp: "Male pronoun."},
+                {en: "<b>She</b> is singing.", tel: "ఆమె పాడుతోంది.", exp: "Female pronoun."},
+                {en: "<b>It</b> is a cute puppy.", tel: "ఇది కుక్కపిల్ల.", exp: "Animal/thing pronoun."},
+                {en: "<b>We</b> are going.", tel: "మేము వెళ్తున్నాము.", exp: "First person plural."},
+                {en: "<b>They</b> are reading.", tel: "వారు చదువుతున్నారు.", exp: "Plural pronoun."},
+                {en: "<b>He</b> gave me a pen.", tel: "అతను పెన్ను ఇచ్చాడు.", exp: "Subject pronoun."},
+                {en: "<b>She</b> cooked food.", tel: "ఆమె వంట చేసింది.", exp: "Subject pronoun."},
+                {en: "<b>They</b> live in Chennai.", tel: "వారు చెన్నైలో.", exp: "Plural subject."},
+                {en: "<b>It</b> is raining.", tel: "వర్షం కురుస్తోంది.", exp: "Weather pronoun."},
+                {en: "<b>You</b> sing well.", tel: "నువ్వు పాడుతావు.", exp: "Second person."},
+                {en: "<b>I</b> love my parents.", tel: "నేను ప్రేమిస్తాను.", exp: "First person."},
+                {en: "<b>We</b> won the match.", tel: "మేము గెలిచాము.", exp: "First person plural."},
+                {en: "Did <b>he</b> finish?", tel: "అతను పూర్తి చేశాడా?", exp: "Question pronoun."},
+                {en: "Will <b>she</b> come?", tel: "ఆమె వస్తుందా?", exp: "Female pronoun."},
+                {en: "Tell <b>them</b> to be quiet.", tel: "వారికి చెప్పండి.", exp: "Object pronoun."},
+                {en: "Please help <b>me</b>.", tel: "నాకు సహాయం చేయండి.", exp: "Object pronoun."},
+                {en: "I saw <b>him</b>.", tel: "నేను అతన్ని చూశాను.", exp: "Object pronoun."},
+                {en: "Give <b>it</b> to me.", tel: "అది ఇవ్వు.", exp: "Object pronoun."}
+            ],
+            "possessive-pronoun": [
+                {en: "This book is <b>mine</b>.", tel: "ఈ పుస్తకం నాది.", exp: "Ownership by me."},
+                {en: "That pen is <b>yours</b>.", tel: "ఆ పెన్ను నీది.", exp: "Ownership by listener."},
+                {en: "The bag is <b>his</b>.", tel: "బ్యాగ్ అతనిది.", exp: "Ownership by male."},
+                {en: "The doll is <b>hers</b>.", tel: "బొమ్మ ఆమెది.", exp: "Ownership by female."},
+                {en: "This house is <b>ours</b>.", tel: "ఈ ఇల్లు మాది.", exp: "Ownership by us."},
+                {en: "Those toys are <b>theirs</b>.", tel: "ఆ బొమ్మలు వారివి.", exp: "Ownership by them."},
+                {en: "Is this pencil <b>yours</b>?", tel: "ఈ పెన్సిల్ నీదా?", exp: "Possessive question."},
+                {en: "That car is <b>theirs</b>.", tel: "ఆ కారు వారిది.", exp: "Possessive."},
+                {en: "The victory is <b>ours</b>.", tel: "విజయం మాది.", exp: "Possessive."},
+                {en: "The choice is <b>yours</b>.", tel: "ఎంపిక మీది.", exp: "Possessive."},
+                {en: "That garden is <b>theirs</b>.", tel: "ఆ తోట వారిది.", exp: "Possessive."},
+                {en: "This puppy is <b>mine</b>.", tel: "ఈ కుక్కపిల్ల నాది.", exp: "Ownership."},
+                {en: "The picture is <b>hers</b>.", tel: "చిత్రం ఆమెది.", exp: "Ownership."},
+                {en: "That bicycle is <b>his</b>.", tel: "సైకిల్ అతనిది.", exp: "Ownership."},
+                {en: "Is this lunchbox <b>yours</b>?", tel: "లంచ్‌బాక్స్ నీదా?", exp: "Possessive."},
+                {en: "The success is <b>theirs</b>.", tel: "విజయం వారిది.", exp: "Possessive."},
+                {en: "The responsibility is <b>mine</b>.", tel: "బాధ్యత నాది.", exp: "Possessive."},
+                {en: "That computer is <b>his</b>.", tel: "కంప్యూటర్ అతనిది.", exp: "Possessive."},
+                {en: "This coat is <b>hers</b>.", tel: "కోట్ ఆమెది.", exp: "Possessive."},
+                {en: "Our school is bigger than <b>theirs</b>.", tel: "పాఠశాల వారి దానికంటే పెద్దది.", exp: "Possessive."}
+            ],
+            "reflexive-pronoun": [
+                {en: "I hurt <b>myself</b>.", tel: "నేను గాయపరుచుకున్నాను.", exp: "Reflects to I."},
+                {en: "Did you do this <b>yourself</b>?", tel: "నీంతట నువ్వే చేశావా?", exp: "Reflects to you."},
+                {en: "He cooked food <b>himself</b>.", tel: "అతను స్వయంగా వంట.", exp: "Reflects to he."},
+                {en: "She painted <b>herself</b>.", tel: "ఆమె స్వయంగా.", exp: "Reflects to she."},
+                {en: "The cat washed <b>itself</b>.", tel: "పిల్లి తనను తాను.", exp: "Reflects to it."},
+                {en: "We cleaned <b>ourselves</b>.", tel: "మేము శుభ్రం.", exp: "Reflects to we."},
+                {en: "They built it <b>themselves</b>.", tel: "వారు స్వయంగా.", exp: "Reflects to they."},
+                {en: "Be careful not to cut <b>yourself</b>.", tel: "జాగ్రత్తగా ఉండండి.", exp: "Reflexive."},
+                {en: "He blamed <b>himself</b>.", tel: "అతను నిందించుకున్నాడు.", exp: "Reflexive."},
+                {en: "She prepared <b>herself</b>.", tel: "ఆమె సిద్ధం చేసుకుంది.", exp: "Reflexive."},
+                {en: "We enjoyed <b>ourselves</b>.", tel: "మేము ఎంజాయ్ చేశాము.", exp: "Reflexive."},
+                {en: "Do your homework <b>yourselves</b>.", tel: "మీరే చేసుకోండి.", exp: "Plural reflexive."},
+                {en: "The door opened by <b>itself</b>.", tel: "తలుపు దానంతట అదే.", exp: "Reflexive object."},
+                {en: "He looked at <b>himself</b>.", tel: "అతను అద్దంలో చూసుకున్నాడు.", exp: "Reflexive."},
+                {en: "She spoke to <b>herself</b>.", tel: "ఆమె మాట్లాడుకుంది.", exp: "Reflexive."},
+                {en: "They locked <b>themselves</b>.", tel: "వారు లాక్ చేసుకున్నారు.", exp: "Reflexive."},
+                {en: "I made this cake <b>myself</b>.", tel: "నేనే చేశాను.", exp: "Emphasis reflexive."},
+                {en: "Believe in <b>yourself</b>.", tel: "నీపై నువ్వు నమ్మకం.", exp: "Reflexive."},
+                {en: "Machine turns off by <b>itself</b>.", tel: "యంత్రం ఆಫ್ అవుతుంది.", exp: "Reflexive."},
+                {en: "We can manage <b>ourselves</b>.", tel: "మేము నిర్వహించగలము.", exp: "Reflexive."}
+            ],
+            "demonstrative-pronoun": [
+                {en: "<b>This</b> is my favorite toy.", tel: "ఇది నాకు ఇష్టమైన బొమ్మ.", exp: "Nearby singular."},
+                {en: "<b>That</b> is a tall building.", tel: "అది ఎత్తైన భవనం.", exp: "Distant singular."},
+                {en: "<b>These</b> are sweet mangoes.", tel: "ఇవి మామిడిపండ్లు.", exp: "Nearby plural."},
+                {en: "<b>Those</b> are bright stars.", tel: "అవి నక్షత్రాలు.", exp: "Distant plural."},
+                {en: "<b>This</b> is a wonderful book.", tel: "ఇది అద్భుతం.", exp: "Demonstrative."},
+                {en: "<b>That</b> was a fun movie.", tel: "అది సినిమా.", exp: "Demonstrative."},
+                {en: "<b>These</b> are fresh flowers.", tel: "ఇవి పువ్వులు.", exp: "Demonstrative."},
+                {en: "<b>Those</b> are wild animals.", tel: "అవి జంతువులు.", exp: "Demonstrative."},
+                {en: "Is <b>this</b> your notebook?", tel: "ఇది మీ నోట్‌బుக்கா?", exp: "Demonstrative question."},
+                {en: "Whose house is <b>that</b>?", tel: "అది ఎవరి ఇల్లు?", exp: "Demonstrative."},
+                {en: "<b>These</b> belong to my brother.", tel: "ఇవి మా తమ్మునివి.", exp: "Demonstrative."},
+                {en: "<b>Those</b> shoes are dirty.", tel: "ఆ బూట్లు మురికి.", exp: "Demonstrative."},
+                {en: "<b>This</b> tastes delicious.", tel: "ఇది రుచిగా ఉంది.", exp: "Demonstrative."},
+                {en: "<b>That</b> looks like a spaceship.", tel: "అది అంతరిక్ష నౌక.", exp: "Demonstrative."},
+                {en: "<b>These</b> are my friends.", tel: "ఇవి నా స్నేహితులు.", exp: "Demonstrative."},
+                {en: "<b>Those</b> mountains have snow.", tel: "ఆ పర్వతాలు మంచు.", exp: "Demonstrative."},
+                {en: "<b>This</b> is where I live.", tel: "ఇక్కడే నివసిస్తాను.", exp: "Demonstrative."},
+                {en: "<b>That</b> is the right answer.", tel: "అది సరైన సమాధానం.", exp: "Demonstrative."},
+                {en: "Are <b>these</b> your pencils?", tel: "ఇవి మీ పెన్సిళ్లా?", exp: "Demonstrative."},
+                {en: "<b>Those</b> were wonderful days.", tel: "అవి మంచి రోజులు.", exp: "Demonstrative."}
+            ],
+            "interrogative-pronoun": [
+                {en: "<b>Who</b> is knocking?", tel: "తలుపు తడుతున్నది ఎవరు?", exp: "Asks about person."},
+                {en: "<b>What</b> is your name?", tel: "నీ పేరు ఏమిటి?", exp: "Asks about thing."},
+                {en: "<b>Which</b> is your color?", tel: "నీకు ఇష్టమైన రంగు ఏది?", exp: "Asks to choose."},
+                {en: "<b>Whose</b> book is this?", tel: "ఇది ఎవరి పుస్తకం?", exp: "Asks ownership."},
+                {en: "<b>Whom</b> did you invite?", tel: "ఎవరిని ఆహ్వానించారు?", exp: "Asks object person."},
+                {en: "<b>Who</b> won the race?", tel: "గెలిచింది ఎవరు?", exp: "Interrogative."},
+                {en: "<b>What</b> happened?", tel: "ఏమి జరిగింది?", exp: "Interrogative."},
+                {en: "<b>Which</b> road leads to temple?", tel: "దారి ఏది?", exp: "Interrogative."},
+                {en: "<b>Whose</b> pen is missing?", tel: "ఎవరి పెన్ను?", exp: "Interrogative."},
+                {en: "<b>Who</b> is your teacher?", tel: "టీచర్ ఎవరు?", exp: "Interrogative."},
+                {en: "<b>What</b> are you doing?", tel: "ఏం చేస్తున్నారు?", exp: "Interrogative."},
+                {en: "<b>Which</b> is a bigger planet?", tel: "గ్రహం ఏది?", exp: "Interrogative."},
+                {en: "<b>Who</b> told you?", tel: "ఎవరు చెప్పారు?", exp: "Interrogative."},
+                {en: "<b>What</b> do you want?", tel: "ఏమి కావాలి?", exp: "Interrogative."},
+                {en: "<b>Which</b> is correct?", tel: "ఏది సరైనది?", exp: "Interrogative."},
+                {en: "<b>Whose</b> bag is here?", tel: "ఎవరి బ్యాగ్?", exp: "Interrogative."},
+                {en: "<b>Who</b> is singing?", tel: "పాడుతున్నది ఎవరు?", exp: "Interrogative."},
+                {en: "<b>What</b> is in the box?", tel: "పెట్టెలో ఏముంది?", exp: "Interrogative."},
+                {en: "<b>Which</b> fruit do you like?", tel: "ఏ పండు ఇష్టం?", exp: "Interrogative."},
+                {en: "<b>Whom</b> should I ask?", tel: "ఎవరిని అడగాలి?", exp: "Interrogative."}
+            ],
+            "relative-pronoun": [
+                {en: "The boy <b>who</b> won is my friend.", tel: "గెలుచుకున్న బాలుడు స్నేహితుడు.", exp: "Connects boy."},
+                {en: "This is the pen <b>that</b> I bought.", tel: "నేను కొన్న పెన్ను.", exp: "Connects pen."},
+                {en: "The book <b>which</b> is on table.", tel: "టేబుల్ మీద ఉన్న పుస్తకం.", exp: "Connects book."},
+                {en: "The girl <b>whom</b> you met.", tel: "మీరు కలిసిన అమ్మాయి.", exp: "Connects girl."},
+                {en: "I know the man <b>whose</b> car was stolen.", tel: "కారు పోయిన వ్యక్తి.", exp: "Shows ownership."},
+                {en: "The dog <b>that</b> barked.", tel: "మొరిగిన కుక్క.", exp: "Relative."},
+                {en: "The teacher <b>who</b> taught us.", tel: "విద్య నేర్పిన ఉపాధ్యాయుడు.", exp: "Relative."},
+                {en: "The car <b>which</b> is red.", tel: "ఎరుపు రంగు కారు.", exp: "Relative."},
+                {en: "Show me the book <b>that</b> you read.", tel: "చదివిన పుస్తకం.", exp: "Relative."},
+                {en: "The boy <b>whose</b> bag is lost.", tel: "బ్యాగ్ పోయిన కుర్రాడు.", exp: "Relative."},
+                {en: "The woman <b>who</b> lives next door.", tel: "పక్క ఇంట్లో ఉండే మహిళ.", exp: "Relative."},
+                {en: "The computer <b>that</b> I use.", tel: "నేను వాడే కంప్యూటర్.", exp: "Relative."},
+                {en: "The city <b>where</b> I was born.", tel: "నేను పుట్టిన నగరము.", exp: "Relative."},
+                {en: "The artist <b>who</b> painted this.", tel: "గీసిన చిత్రకారుడు.", exp: "Relative."},
+                {en: "The gift <b>which</b> you gave.", tel: "మీరు ఇచ్చిన బహుమతి.", exp: "Relative."},
+                {en: "The children <b>who</b> play outside.", tel: "బయట ఆడుకునే పిల్లలు.", exp: "Relative."},
+                {en: "The movie <b>that</b> we watched.", tel: "మేము చూసిన సినిమా.", exp: "Relative."},
+                {en: "The friend <b>whom</b> I trust.", tel: "నేను నమ్మే స్నేహితుడు.", exp: "Relative."},
+                {en: "The house <b>that</b> has a red door.", tel: "ఎరుపు తలుపు ఇల్లు.", exp: "Relative."},
+                {en: "The student <b>whose</b> handwriting is neat.", tel: "అందమైన రాత ఉన్న విద్యార్థి.", exp: "Relative."}
+            ],
+            "indefinite-pronoun": [
+                {en: "<b>Somebody</b> knocked.", tel: "ఎవరో తలుపు తట్టారు.", exp: "Unspecified person."},
+                {en: "<b>Everyone</b> loves happiness.", tel: "ప్రతి ఒక్కరూ సంతోషం.", exp: "All people."},
+                {en: "<b>Nobody</b> came.", tel: "ఎవరూ రాలేదు.", exp: "No person."},
+                {en: "<b>Anything</b> is possible.", tel: "ఏదైనా సాధ్యమే.", exp: "Any thing."},
+                {en: "<b>Nothing</b> is impossible.", tel: "ఏదీ అసమధ్యం కాదు.", exp: "No thing."},
+                {en: "<b>Someone</b> left a bag.", tel: "ఎవరో వదిలిపెట్టారు.", exp: "Indefinite."},
+                {en: "<b>Everything</b> is ready.", tel: "అన్నీ సిద్ధంగా ఉన్నాయి.", exp: "Indefinite."},
+                {en: "<b>Anyone</b> can solve this.", tel: "ఎవరైనా చేయగలరు.", exp: "Indefinite."},
+                {en: "<b>No one</b> knows.", tel: "ఎవరికీ తెలియదు.", exp: "Indefinite."},
+                {en: "<b>Something</b> is moving.", tel: "ఏదో కదులుతోంది.", exp: "Indefinite."},
+                {en: "<b>Few</b> students passed.", tel: "కొద్దిమంది పాసయ్యారు.", exp: "Indefinite."},
+                {en: "<b>Many</b> came to watch.", tel: "చాలా మంది వచ్చారు.", exp: "Indefinite."},
+                {en: "<b>All</b> children love sweets.", tel: "పిల్లలందరికీ ఇష్టం.", exp: "Indefinite."},
+                {en: "<b>Both</b> are smart.", tel: "ఇద్దరూ తెలివైనవారే.", exp: "Indefinite."},
+                {en: "<b>Each</b> received a gift.", tel: "ప్రతి ఒక్కరికీ.", exp: "Indefinite."},
+                {en: "<b>Several</b> attended.", tel: "అనేక మంది హాజరయ్యారు.", exp: "Indefinite."},
+                {en: "Is <b>anybody</b> home?", tel: "ఎవరైనా ఉన్నారా?", exp: "Indefinite question."},
+                {en: "<b>Nothing</b> is better than peace.", tel: "శాంతి కన్నా ఏదీ లేదు.", exp: "Indefinite."},
+                {en: "<b>Somebody</b> stole my pencil.", tel: "ఎవరో దొంగిలించారు.", exp: "Indefinite."},
+                {en: "<b>Everyone</b> enjoyed.", tel: "అందరూ ఆస్వాదించారు.", exp: "Indefinite."}
+            ]
+        };
+
+        // Render examples & wire click handlers on DOM load
+        document.addEventListener('DOMContentLoaded', () => {
+            // Populate examples
+            for (const [key, items] of Object.entries(grammarData)) {
+                const container = document.getElementById(`${key}-examples`);
+                if (container) {
+                    container.innerHTML = items.map((item, idx) => `
+                        <div class="example-card">
+                            <div class="ex-number">#${idx + 1}</div>
+                            <div>
+                                <div class="ex-english">
+                                    ${item.en}
+                                    <button class="speak-btn" onclick="speakText('${item.en.replace(/<[^>]*>?/gm, '')}')" title="Listen"><i class="fa-solid fa-volume-high"></i></button>
+                                </div>
+                                <div class="ex-telugu">${item.tel}</div>
+                            </div>
+                            <div class="ex-explanation"><i class="fa-solid fa-circle-info"></i> ${item.exp}</div>
+                        </div>
+                    `).join('');
+                }
+            }
+
+            // Wire Index Links
+            document.querySelectorAll('.index-link').forEach(link => {
+                link.addEventListener('click', () => {
+                    const targetId = link.getAttribute('data-target');
+                    showSection(targetId);
+                });
+            });
+
+            // Wire Back Buttons
+            document.querySelectorAll('.back-to-index-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    goBackToIndex();
+                });
+            });
+        });
+
+        function showSection(sectionId) {
+            const indexBox = document.getElementById('main-index');
+            if (indexBox) indexBox.classList.add('hidden');
+
+            document.querySelectorAll('.grammar-section').forEach(sec => {
+                sec.classList.remove('active');
+            });
+
+            const target = document.getElementById(sectionId);
+            if (target) {
+                target.classList.add('active');
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+        }
+
+        function goBackToIndex() {
+            document.querySelectorAll('.grammar-section').forEach(sec => {
+                sec.classList.remove('active');
+            });
+
+            const indexBox = document.getElementById('main-index');
+            if (indexBox) indexBox.classList.remove('hidden');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function speakText(text) {
+            if ('speechSynthesis' in window) {
+                window.speechSynthesis.cancel();
+                const utterance = new SpeechSynthesisUtterance(text);
+                utterance.rate = 0.85;
+                utterance.pitch = 1.1;
+                window.speechSynthesis.speak(utterance);
+            }
+        }
+    </script>
+</body>
+</html>
